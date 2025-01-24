@@ -3,6 +3,8 @@ package me.devstudy.account.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,4 +33,8 @@ public class Account {
 
     @Embedded
     private Notification notification;
+
+    public void generateToken() {
+        this.emailToken = UUID.randomUUID().toString();
+    }
 }
