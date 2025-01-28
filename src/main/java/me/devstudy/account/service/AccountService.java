@@ -7,6 +7,7 @@ import me.devstudy.account.domain.entity.Notification;
 import me.devstudy.account.repository.AccountRepository;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,7 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public void signup(SignupForm signupForm) {
         Account newAccount = saveNewAccount(signupForm);
@@ -25,7 +27,7 @@ public class AccountService {
     private Account saveNewAccount(SignupForm signupForm) {
         Account account = Account.builder()
                 .email(signupForm.getEmail())
-                .password(signupForm.getPassword())
+                .password(bCryptPasswordEncoder.encode(signupForm.getPassword()))
                 .nickname(signupForm.getNickname())
                 .notification(Notification.builder()
                         .createdByWeb(true)
