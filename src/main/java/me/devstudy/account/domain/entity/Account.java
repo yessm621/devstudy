@@ -3,6 +3,7 @@ package me.devstudy.account.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +28,7 @@ public class Account {
     private String password;
     private boolean isValid;
     private String emailToken;
+    private LocalDateTime joinedAt;
 
     @Embedded
     private Profile profile;
@@ -36,5 +38,10 @@ public class Account {
 
     public void generateToken() {
         this.emailToken = UUID.randomUUID().toString();
+    }
+
+    public void verified() {
+        this.isValid = true;
+        this.joinedAt = LocalDateTime.now();
     }
 }
