@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -45,7 +47,8 @@ class AccountControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("signupForm"))
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @Test
@@ -71,7 +74,8 @@ class AccountControllerTest {
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"));
+                .andExpect(view().name("redirect:/"))
+                .andExpect(authenticated().withUsername("nickname"));
 
         assertTrue(accountRepository.existsByEmail("nohsm621@gmail.com"));
 
@@ -91,7 +95,8 @@ class AccountControllerTest {
                         .param("email", "email"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/email-verification"))
-                .andExpect(model().attributeExists("error"));
+                .andExpect(model().attributeExists("error"))
+                .andExpect(unauthenticated());
     }
 
     @Test
@@ -109,7 +114,6 @@ class AccountControllerTest {
                 .build();
 
         Account newAccount = accountRepository.save(account);
-        System.out.println("newAccount = " + newAccount);
         newAccount.generateToken();
 
         mockMvc.perform(get("/check-email-token")
@@ -118,6 +122,7 @@ class AccountControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/email-verification"))
                 .andExpect(model().attributeDoesNotExist("error"))
-                .andExpect(model().attributeExists("numberOfUsers", "nickname"));
+                .andExpect(model().attributeExists("numberOfUsers", "nickname"))
+                .andExpect(authenticated().withUsername("nickname"));
     }
 }

@@ -1,5 +1,7 @@
 package me.devstudy.account.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.devstudy.account.controller.validator.SignupFormValidator;
@@ -32,16 +34,19 @@ public class AccountController {
     }
 
     @PostMapping("/sign-up")
-    public String signupSubmit(@Valid @ModelAttribute SignupForm signupForm, Errors errors) {
+    public String signupSubmit(HttpServletRequest request, HttpServletResponse response,
+                               @Valid @ModelAttribute SignupForm signupForm, Errors errors) {
         if (errors.hasErrors()) {
             return "account/sign-up";
         }
-        accountService.signup(signupForm);
+        Account account = accountService.signup(signupForm);
+        accountService.login(account, request, response);
         return "redirect:/";
     }
 
     @GetMapping("/check-email-token")
-    public String verifyEmail(@RequestParam("token") String token,
+    public String verifyEmail(HttpServletRequest request, HttpServletResponse response,
+                              @RequestParam("token") String token,
                               @RequestParam("email") String email, Model model) {
         Account account = accountService.findAccountByEmail(email);
         if (account == null) {
@@ -53,6 +58,7 @@ public class AccountController {
             return "account/email-verification";
         }
         account.verified();
+        accountService.login(account, request, response);
         model.addAttribute("numberOfUsers", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return "account/email-verification";
