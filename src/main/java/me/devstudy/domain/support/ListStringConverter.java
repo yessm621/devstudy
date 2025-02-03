@@ -1,4 +1,4 @@
-package me.devstudy.account.domain.support;
+package me.devstudy.domain.support;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

@@ -1,12 +1,11 @@
-package me.devstudy.account.service;
+package me.devstudy.account;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.devstudy.account.controller.SignupForm;
-import me.devstudy.account.domain.entity.Account;
-import me.devstudy.account.domain.entity.Notification;
-import me.devstudy.account.repository.AccountRepository;
+import me.devstudy.account.dto.SignupForm;
+import me.devstudy.domain.Account;
+import me.devstudy.domain.Notification;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

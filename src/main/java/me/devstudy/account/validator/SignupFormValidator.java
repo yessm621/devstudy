@@ -1,8 +1,8 @@
-package me.devstudy.account.controller.validator;
+package me.devstudy.account.validator;
 
 import lombok.RequiredArgsConstructor;
-import me.devstudy.account.controller.SignupForm;
-import me.devstudy.account.repository.AccountRepository;
+import me.devstudy.account.dto.SignupForm;
+import me.devstudy.account.AccountRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

@@ -1,8 +1,8 @@
-package me.devstudy.account.domain.entity;
+package me.devstudy.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import me.devstudy.account.domain.support.ListStringConverter;
+import me.devstudy.domain.support.ListStringConverter;
 
 import java.util.List;
 

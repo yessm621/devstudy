@@ -1,13 +1,12 @@
-package me.devstudy.account.controller;
+package me.devstudy.account;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.devstudy.account.controller.validator.SignupFormValidator;
-import me.devstudy.account.domain.entity.Account;
-import me.devstudy.account.repository.AccountRepository;
-import me.devstudy.account.service.AccountService;
+import me.devstudy.account.dto.SignupForm;
+import me.devstudy.account.validator.SignupFormValidator;
+import me.devstudy.domain.Account;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;

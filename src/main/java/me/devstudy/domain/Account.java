@@ -1,4 +1,4 @@
-package me.devstudy.account.domain.entity;
+package me.devstudy.domain;
 
 import jakarta.persistence.*;
 import lombok.*;

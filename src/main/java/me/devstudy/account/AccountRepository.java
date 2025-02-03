@@ -1,6 +1,6 @@
-package me.devstudy.account.repository;
+package me.devstudy.account;
 
-import me.devstudy.account.domain.entity.Account;
+import me.devstudy.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {

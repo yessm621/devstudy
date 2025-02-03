@@ -1,8 +1,8 @@
 package me.devstudy.account.controller;
 
-import me.devstudy.account.domain.entity.Account;
-import me.devstudy.account.domain.entity.Notification;
-import me.devstudy.account.repository.AccountRepository;
+import me.devstudy.account.AccountRepository;
+import me.devstudy.domain.Account;
+import me.devstudy.domain.Notification;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
