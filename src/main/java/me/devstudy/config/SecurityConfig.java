@@ -22,6 +22,7 @@ public class SecurityConfig {
                                 "/check-email", "/check-email-token",
                                 "/email-login", "/check-email-login", "/login-link").permitAll()
                         .requestMatchers(HttpMethod.GET, "/profile/*").permitAll()
+                        .requestMatchers("/node_modules/**", "/images/**", "/h2-console/**").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();
@@ -32,14 +33,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    /*@Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        // 정적 리소스 spring security 대상에서 제외
-        return (web) ->
-                web
-                        .ignoring()
-                        .requestMatchers(
-                                PathRequest.toStaticResources().atCommonLocations()
-                        );
-    }
+        return (web) -> web.ignoring()
+                .requestMatchers(
+                        PathRequest.toStaticResources().atCommonLocations()
+                );
+    }*/
 }
