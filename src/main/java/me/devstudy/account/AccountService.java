@@ -52,7 +52,7 @@ public class AccountService {
         return newAccount;
     }
 
-    private void sendVerificationEmail(Account newAccount) {
+    public void sendVerificationEmail(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(newAccount.getEmail());
         mailMessage.setSubject("DevStudy 회원가입 인증");

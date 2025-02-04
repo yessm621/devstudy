@@ -29,6 +29,7 @@ public class Account {
     private boolean isValid;
     private String emailToken;
     private LocalDateTime joinedAt;
+    private LocalDateTime emailTokenGeneratedAt;
 
     @Embedded
     private Profile profile;
@@ -38,10 +39,15 @@ public class Account {
 
     public void generateToken() {
         this.emailToken = UUID.randomUUID().toString();
+        this.emailTokenGeneratedAt = LocalDateTime.now();
     }
 
     public void verified() {
         this.isValid = true;
         this.joinedAt = LocalDateTime.now();
+    }
+
+    public boolean enableToSendEmail() {
+        return this.emailTokenGeneratedAt.isBefore(LocalDateTime.now().minusMinutes(5));
     }
 }
