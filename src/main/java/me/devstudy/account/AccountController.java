@@ -56,7 +56,7 @@ public class AccountController {
             model.addAttribute("error", "wrong.token");
             return "account/email-verification";
         }
-        account.verified();
+        accountService.emailVerified(account);
         accountService.login(account, request, response);
         model.addAttribute("numberOfUsers", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
@@ -78,5 +78,10 @@ public class AccountController {
         }
         accountService.sendVerificationEmail(account);
         return "redirect:/";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "account/login";
     }
 }

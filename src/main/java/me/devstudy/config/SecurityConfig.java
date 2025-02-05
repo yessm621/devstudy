@@ -22,6 +22,13 @@ public class SecurityConfig {
                         .requestMatchers("/node_modules/**", "/images/**", "/h2-console/**").permitAll()
                         .anyRequest().authenticated());
 
+        http.formLogin(auth -> auth
+                .loginPage("/login").permitAll());
+
+        http.logout(auth -> auth
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/"));
+
         return http.build();
     }
 
