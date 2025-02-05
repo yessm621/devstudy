@@ -1,6 +1,8 @@
 package me.devstudy.account.controller;
 
 import me.devstudy.account.AccountRepository;
+import me.devstudy.account.AccountService;
+import me.devstudy.account.dto.SignupForm;
 import me.devstudy.domain.Account;
 import me.devstudy.domain.Notification;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +35,9 @@ class AccountControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    AccountService accountService;
 
     @Autowired
     AccountRepository accountRepository;
@@ -124,5 +129,49 @@ class AccountControllerTest {
                 .andExpect(model().attributeDoesNotExist("error"))
                 .andExpect(model().attributeExists("numberOfUsers", "nickname"))
                 .andExpect(authenticated().withUsername("nickname"));
+    }
+
+    @Test
+    @DisplayName("이메일로 로그인: 성공")
+    void loginWithEmail() throws Exception {
+        signup();
+        mockMvc.perform(post("/login")
+                        .param("username", "nohsm621@gmail.com")
+                        .param("password", "1234!@#$qwer")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(authenticated().withUsername("nickname"));
+    }
+
+    @Test
+    @DisplayName("닉네임으로 로그인: 성공")
+    void loginWithNickname() throws Exception {
+        signup();
+        mockMvc.perform(post("/login")
+                        .param("username", "nickname")
+                        .param("password", "1234!@#$qwer")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(authenticated().withUsername("nickname"));
+    }
+
+    @Test
+    @DisplayName("로그아웃: 성공")
+    void logout() throws Exception {
+        mockMvc.perform(post("/logout")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(unauthenticated());
+    }
+
+    private void signup() {
+        SignupForm signupForm = new SignupForm();
+        signupForm.setEmail("nohsm621@gmail.com");
+        signupForm.setNickname("nickname");
+        signupForm.setPassword("1234!@#$qwer");
+        accountService.signup(signupForm);
     }
 }
