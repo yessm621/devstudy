@@ -1,10 +1,10 @@
 package me.devstudy.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Lob;
 import lombok.*;
-import me.devstudy.domain.support.ListStringConverter;
-
-import java.util.List;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,9 +15,8 @@ import java.util.List;
 public class Profile {
 
     private String bio;
-
-    @Convert(converter = ListStringConverter.class)
-    private List<String> urls;
+    private String url;
+    private String job;
     private String location;
     private String company;
 
