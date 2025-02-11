@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @Getter
 @ToString
-public class Account {
+public class Account extends AuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
