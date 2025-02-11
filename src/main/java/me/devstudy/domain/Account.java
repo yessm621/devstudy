@@ -63,4 +63,26 @@ public class Account extends AuditingEntity {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    @PostLoad
+    private void init() {
+        if (profile == null) {
+            profile = new Profile();
+        }
+
+        if (notification == null) {
+            notification = new Notification();
+        }
+    }
+
+    public void updateProfile(Profile profile) {
+        if (this.profile == null) {
+            this.profile = new Profile();
+        }
+        this.profile.setBio(profile.getBio());
+        this.profile.setUrl(profile.getUrl());
+        this.profile.setJob(profile.getJob());
+        this.profile.setLocation(profile.getLocation());
+        this.profile.setCompany(profile.getCompany());
+    }
 }
