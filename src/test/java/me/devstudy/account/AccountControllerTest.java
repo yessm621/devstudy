@@ -1,7 +1,5 @@
-package me.devstudy.account.controller;
+package me.devstudy.account;
 
-import me.devstudy.account.AccountRepository;
-import me.devstudy.account.AccountService;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.domain.Account;
 import me.devstudy.domain.Notification;

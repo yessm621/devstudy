@@ -3,10 +3,10 @@ package me.devstudy.account;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import me.devstudy.account.dto.ProfileDto;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.domain.Account;
 import me.devstudy.domain.Notification;
-import me.devstudy.domain.Profile;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -95,8 +95,8 @@ public class AccountService implements UserDetailsService {
     }
 
     @Transactional
-    public void updateProfile(Account account, Profile profile) {
-        account.updateProfile(profile);
+    public void updateProfile(Account account, ProfileDto profileDto) {
+        account.updateProfile(profileDto);
         accountRepository.save(account);
     }
 }

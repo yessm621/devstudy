@@ -2,6 +2,7 @@ package me.devstudy.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.devstudy.account.dto.ProfileDto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -75,14 +76,13 @@ public class Account extends AuditingEntity {
         }
     }
 
-    public void updateProfile(Profile profile) {
+    public void updateProfile(ProfileDto profileDto) {
         if (this.profile == null) {
             this.profile = new Profile();
         }
-        this.profile.setBio(profile.getBio());
-        this.profile.setUrl(profile.getUrl());
-        this.profile.setJob(profile.getJob());
-        this.profile.setLocation(profile.getLocation());
-        this.profile.setCompany(profile.getCompany());
+        this.profile.setBio(profileDto.getBio());
+        this.profile.setUrl(profileDto.getUrl());
+        this.profile.setJob(profileDto.getJob());
+        this.profile.setLocation(profileDto.getLocation());
     }
 }

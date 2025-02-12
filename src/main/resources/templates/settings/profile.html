@@ -18,7 +18,7 @@
 
       <h2 class="col-sm-12" th:text="${account.nickname}">nickname</h2>
       <div class="row mt-3">
-        <form class="col-sm-6" action="#" th:action="@{/settings/profile}" th:object="${profile}" method="post"
+        <form class="col-sm-6" action="#" th:action="@{/settings/profile}" th:object="${profileDto}" method="post"
               novalidate>
           <div class="form-group">
             <label for="bio">한 줄 소개</label>
