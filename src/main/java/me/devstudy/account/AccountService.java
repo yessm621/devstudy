@@ -99,4 +99,9 @@ public class AccountService implements UserDetailsService {
         account.updateProfile(profileDto);
         accountRepository.save(account);
     }
+
+    public void updatePassword(Account account, String newPassword) {
+        account.updatePassword(bCryptPasswordEncoder.encode(newPassword));
+        accountRepository.save(account);
+    }
 }

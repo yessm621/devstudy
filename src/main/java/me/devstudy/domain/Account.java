@@ -86,4 +86,8 @@ public class Account extends AuditingEntity {
         this.profile.setLocation(profileDto.getLocation());
         this.profile.setImage(profileDto.getImage());
     }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
