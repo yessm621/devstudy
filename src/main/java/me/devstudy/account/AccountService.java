@@ -100,6 +100,7 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
     }
 
+    @Transactional
     public void updatePassword(Account account, String newPassword) {
         account.updatePassword(bCryptPasswordEncoder.encode(newPassword));
         accountRepository.save(account);
