@@ -18,6 +18,7 @@ public class ProfileDto {
     private String job;
     @Length(max = 50)
     private String location;
+    private String image;
 
     public static ProfileDto from(Account account) {
         return new ProfileDto(account);
@@ -28,5 +29,6 @@ public class ProfileDto {
         this.url = account.getProfile().getUrl();
         this.job = account.getProfile().getJob();
         this.location = account.getProfile().getLocation();
+        this.image = account.getProfile().getImage();
     }
 }

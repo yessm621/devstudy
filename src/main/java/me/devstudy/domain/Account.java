@@ -84,5 +84,6 @@ public class Account extends AuditingEntity {
         this.profile.setUrl(profileDto.getUrl());
         this.profile.setJob(profileDto.getJob());
         this.profile.setLocation(profileDto.getLocation());
+        this.profile.setImage(profileDto.getImage());
     }
 }
