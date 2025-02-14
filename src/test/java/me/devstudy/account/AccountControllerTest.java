@@ -110,9 +110,9 @@ class AccountControllerTest {
                 .password("1234!@#$qwer")
                 .nickname("nickname")
                 .notification(Notification.builder()
-                        .createdByWeb(true)
-                        .updatedByWeb(true)
-                        .registrationResultByEmailByWeb(true)
+                        .studyCreatedByWeb(true)
+                        .studyUpdatedByWeb(true)
+                        .studyRegistrationResultByWeb(true)
                         .build())
                 .build();
 

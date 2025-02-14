@@ -3,10 +3,10 @@ package me.devstudy.account;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.ProfileDto;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.domain.Account;
-import me.devstudy.domain.Notification;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,25 +36,15 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public Account signup(SignupForm signupForm) {
         Account newAccount = saveNewAccount(signupForm);
-        newAccount.generateToken();
         sendVerificationEmail(newAccount);
         return newAccount;
     }
 
     private Account saveNewAccount(SignupForm signupForm) {
-        Account account = Account.builder()
-                .email(signupForm.getEmail())
-                .password(bCryptPasswordEncoder.encode(signupForm.getPassword()))
-                .nickname(signupForm.getNickname())
-                .notification(Notification.builder()
-                        .createdByWeb(true)
-                        .createdByEmail(true)
-                        .registrationResultByEmailByWeb(true)
-                        .build())
-                .build();
-
-        Account newAccount = accountRepository.save(account);
-        return newAccount;
+        Account account = Account.with(signupForm.getEmail(), signupForm.getNickname(),
+                bCryptPasswordEncoder.encode(signupForm.getPassword()));
+        account.generateToken();
+        return accountRepository.save(account);
     }
 
     public void sendVerificationEmail(Account newAccount) {
@@ -103,6 +93,12 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public void updatePassword(Account account, String newPassword) {
         account.updatePassword(bCryptPasswordEncoder.encode(newPassword));
+        accountRepository.save(account);
+    }
+
+    @Transactional
+    public void updateNotification(Account account, NotificationForm notificationForm) {
+        account.updateNotification(notificationForm);
         accountRepository.save(account);
     }
 }

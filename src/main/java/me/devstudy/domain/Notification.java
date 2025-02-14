@@ -8,13 +8,14 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
+@Setter
 @ToString
 public class Notification {
 
-    private boolean createdByEmail;
-    private boolean createdByWeb;
-    private boolean registrationResultByEmailByEmail;
-    private boolean registrationResultByEmailByWeb;
-    private boolean updatedByEmail;
-    private boolean updatedByWeb;
+    private boolean studyCreatedByEmail = false;
+    private boolean studyCreatedByWeb = true;
+    private boolean studyRegistrationResultByEmail = false;
+    private boolean studyRegistrationResultByWeb = true;
+    private boolean studyUpdatedByEmail = false;
+    private boolean studyUpdatedByWeb = true;
 }

@@ -2,6 +2,7 @@ package me.devstudy.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.ProfileDto;
 
 import java.time.LocalDateTime;
@@ -38,6 +39,14 @@ public class Account extends AuditingEntity {
 
     @Embedded
     private Notification notification;
+
+    public static Account with(String email, String nickname, String password) {
+        Account account = new Account();
+        account.email = email;
+        account.nickname = nickname;
+        account.password = password;
+        return account;
+    }
 
     public void generateToken() {
         this.emailToken = UUID.randomUUID().toString();
@@ -89,5 +98,14 @@ public class Account extends AuditingEntity {
 
     public void updatePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    public void updateNotification(NotificationForm notificationForm) {
+        this.notification.setStudyCreatedByEmail(notificationForm.isStudyCreatedByEmail());
+        this.notification.setStudyCreatedByWeb(notificationForm.isStudyCreatedByWeb());
+        this.notification.setStudyUpdatedByEmail(notificationForm.isStudyUpdatedByEmail());
+        this.notification.setStudyUpdatedByWeb(notificationForm.isStudyUpdatedByWeb());
+        this.notification.setStudyRegistrationResultByEmail(notificationForm.isStudyRegistrationResultByEmail());
+        this.notification.setStudyRegistrationResultByWeb(notificationForm.isStudyRegistrationResultByWeb());
     }
 }

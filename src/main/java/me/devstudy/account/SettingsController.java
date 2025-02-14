@@ -2,6 +2,7 @@ package me.devstudy.account;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.PasswordForm;
 import me.devstudy.account.dto.ProfileDto;
 import me.devstudy.account.validator.PasswordFormValidator;
@@ -63,4 +64,24 @@ public class SettingsController {
         attributes.addFlashAttribute("message", "패스워드를 변경했습니다.");
         return "redirect:/settings/password";
     }
+
+    @GetMapping("/notification")
+    public String notificationForm(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute("notificationForm", NotificationForm.from(account));
+        return "settings/notification";
+    }
+
+    @PostMapping("/notification")
+    public String updateNotification(@CurrentUser Account account, @Valid NotificationForm notificationForm,
+                                     Errors errors, Model model, RedirectAttributes attributes) {
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return "settings/notification";
+        }
+        accountService.updateNotification(account, notificationForm);
+        attributes.addFlashAttribute("message", "알림 설정을 수정하였습니다.");
+        return "redirect:/settings/notification";
+    }
+
 }
