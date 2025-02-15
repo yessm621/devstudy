@@ -181,4 +181,60 @@ class SettingsControllerTest {
         assertTrue(account.getNotification().isStudyUpdatedByEmail());
         assertTrue(account.getNotification().isStudyUpdatedByWeb());
     }
+
+    @Test
+    @DisplayName("닉네임 수정 폼")
+    @WithAccount("nickname")
+    void updateNicknameForm() throws Exception {
+        mockMvc.perform(get("/settings/account"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("settings/account"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("nicknameForm"));
+    }
+
+    @Test
+    @DisplayName("닉네임 수정: 입력값 정상")
+    @WithAccount("nickname")
+    void updateNickname() throws Exception {
+        String newNickname = "nickname2";
+        mockMvc.perform(post("/settings/account")
+                        .param("nickname", newNickname)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/settings/account"))
+                .andExpect(flash().attributeExists("message"));
+
+        Account account = accountRepository.findByNickname(newNickname);
+        assertEquals(newNickname, account.getNickname());
+    }
+
+    @Test
+    @DisplayName("닉네임 수정: 에러(길이)")
+    @WithAccount("nickname")
+    void updateNicknameWithShortNickname() throws Exception {
+        String newNickname = "n";
+        mockMvc.perform(post("/settings/account")
+                        .param("nickname", newNickname)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("settings/account"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("nicknameForm"));
+    }
+
+    @Test
+    @DisplayName("닉네임 수정: 에러(중복)")
+    @WithAccount("nickname")
+    void updateNicknameWithDuplicatedNickname() throws Exception {
+        String newNickname = "nickname";
+        mockMvc.perform(post("/settings/account")
+                        .param("nickname", newNickname)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("settings/account"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("nicknameForm"))
+                .andExpect(model().attributeExists("account"));
+    }
 }

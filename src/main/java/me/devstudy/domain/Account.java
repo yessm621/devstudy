@@ -108,4 +108,8 @@ public class Account extends AuditingEntity {
         this.notification.setStudyRegistrationResultByEmail(notificationForm.isStudyRegistrationResultByEmail());
         this.notification.setStudyRegistrationResultByWeb(notificationForm.isStudyRegistrationResultByWeb());
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

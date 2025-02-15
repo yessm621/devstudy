@@ -1,10 +1,14 @@
 package me.devstudy.account;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import me.devstudy.account.dto.NicknameForm;
 import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.PasswordForm;
 import me.devstudy.account.dto.ProfileDto;
+import me.devstudy.account.validator.NicknameFormValidator;
 import me.devstudy.account.validator.PasswordFormValidator;
 import me.devstudy.domain.Account;
 import org.springframework.stereotype.Controller;
@@ -19,13 +23,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/settings")
 public class SettingsController {
 
-    private final PasswordFormValidator passwordFormValidator;
     private final AccountService accountService;
+    private final PasswordFormValidator passwordFormValidator;
+    private final NicknameFormValidator nicknameFormValidator;
 
     @InitBinder("passwordForm")
-    public void initBinder(WebDataBinder webDataBinder) {
+    public void passwordFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(passwordFormValidator);
     }
+
+    @InitBinder("nicknameForm")
+    public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(nicknameFormValidator);
+    }
+
 
     @GetMapping("/profile")
     public String profileUpdateForm(@CurrentUser Account account, Model model) {
@@ -84,4 +95,23 @@ public class SettingsController {
         return "redirect:/settings/notification";
     }
 
+    @GetMapping("/account")
+    public String nicknameForm(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute("nicknameForm", new NicknameForm(account.getNickname()));
+        return "settings/account";
+    }
+
+    @PostMapping("/account")
+    public String updateNickname(@CurrentUser Account account, @Valid NicknameForm nicknameForm,
+                                 Errors errors, Model model, RedirectAttributes attributes,
+                                 HttpServletRequest request, HttpServletResponse response) {
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return "settings/account";
+        }
+        accountService.updateNickname(account, nicknameForm.getNickname(), request, response);
+        attributes.addFlashAttribute("message", "닉네임을 수정하였습니다.");
+        return "redirect:/settings/account";
+    }
 }
