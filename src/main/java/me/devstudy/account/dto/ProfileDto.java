@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.devstudy.domain.Account;
+import me.devstudy.domain.Profile;
 import org.hibernate.validator.constraints.Length;
 
 @Data
@@ -25,10 +26,11 @@ public class ProfileDto {
     }
 
     protected ProfileDto(Account account) {
-        this.bio = account.getProfile().getBio();
-        this.url = account.getProfile().getUrl();
-        this.job = account.getProfile().getJob();
-        this.location = account.getProfile().getLocation();
-        this.image = account.getProfile().getImage();
+        Profile profile = account.getProfile();
+        this.bio = profile != null ? profile.getBio() : null;
+        this.url = profile != null ? profile.getUrl() : null;
+        this.job = profile != null ? profile.getJob() : null;
+        this.location = profile != null ? profile.getLocation() : null;
+        this.image = profile != null ? profile.getImage() : null;
     }
 }
