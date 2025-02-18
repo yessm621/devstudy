@@ -7,6 +7,7 @@ import me.devstudy.account.dto.ProfileDto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -39,6 +40,9 @@ public class Account extends AuditingEntity {
 
     @Embedded
     private Notification notification;
+
+    @ManyToMany
+    private Set<Tag> tags;
 
     public static Account with(String email, String nickname, String password) {
         Account account = new Account();
