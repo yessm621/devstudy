@@ -50,7 +50,7 @@ public class AccountService implements UserDetailsService {
     public void sendVerificationEmail(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("DevStudy 회원가입 인증");
+        mailMessage.setSubject("[DevStudy] 회원가입 인증");
         mailMessage.setText(String.format("/check-email-token?token=%s&email=%s",
                 newAccount.getEmailToken(), newAccount.getEmail()));
         javaMailSender.send(mailMessage);
@@ -107,5 +107,14 @@ public class AccountService implements UserDetailsService {
         account.updateNickname(nickname);
         accountRepository.save(account);
         login(account, request, response);
+    }
+
+    public void sendLoginLink(Account account) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(account.getEmail());
+        mailMessage.setSubject("[DevStudy] 로그인 링크");
+        mailMessage.setText(String.format("/login-by-email?token=%s&email=%s",
+                account.getEmailToken(), account.getEmail()));
+        javaMailSender.send(mailMessage);
     }
 }

@@ -25,8 +25,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/sign-up", "/login",
-                                "/check-email-token", "/email-login", "/check-email-login", "/login-link").permitAll()
+                        .requestMatchers("/", "/sign-up", "/login", "/check-email-token", "/email-login",
+                                "/check-email-login", "/login-link", "/login-by-email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/profile/*").permitAll()
                         .requestMatchers("/node_modules/**", "/images/**", "/h2-console/**").permitAll()
                         .anyRequest().authenticated());

@@ -112,4 +112,8 @@ public class Account extends AuditingEntity {
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public boolean isValid(String token) {
+        return this.emailToken.equals(token);
+    }
 }
