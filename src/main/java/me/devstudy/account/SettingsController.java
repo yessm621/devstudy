@@ -11,6 +11,8 @@ import me.devstudy.account.dto.ProfileDto;
 import me.devstudy.account.validator.NicknameFormValidator;
 import me.devstudy.account.validator.PasswordFormValidator;
 import me.devstudy.domain.Account;
+import me.devstudy.domain.Tag;
+import me.devstudy.tag.TagRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -18,12 +20,16 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/settings")
 public class SettingsController {
 
     private final AccountService accountService;
+    private final TagRepository tagRepository;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameFormValidator nicknameFormValidator;
 
@@ -113,5 +119,20 @@ public class SettingsController {
         accountService.updateNickname(account, nicknameForm.getNickname(), request, response);
         attributes.addFlashAttribute("message", "닉네임을 수정하였습니다.");
         return "redirect:/settings/account";
+    }
+
+    @GetMapping("/tags")
+    public String updateTags(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        /*Set<Tag> tags = accountService.getTags(account);
+        model.addAttribute("tags", tags.stream()
+                .map(Tag::getTitle)
+                .collect(Collectors.toList()));*/
+        return "settings/tags";
+    }
+
+    @PostMapping("/tags")
+    public String updateTag() {
+        return "settings/tags";
     }
 }
