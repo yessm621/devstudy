@@ -7,6 +7,10 @@ import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.ProfileDto;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.domain.Account;
+import me.devstudy.domain.AccountTag;
+import me.devstudy.domain.Tag;
+import me.devstudy.tag.AccountTagRepository;
+import me.devstudy.tag.TagRepository;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,6 +36,8 @@ import java.util.Optional;
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
+    private final TagRepository tagRepository;
+    private final AccountTagRepository accountTagRepository;
     private final JavaMailSender javaMailSender;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -116,5 +124,31 @@ public class AccountService implements UserDetailsService {
         mailMessage.setText(String.format("/login-by-email?token=%s&email=%s",
                 account.getEmailToken(), account.getEmail()));
         javaMailSender.send(mailMessage);
+    }
+
+    //TODO::조회 안됨
+    public List<String> getTags(Account account) {
+        return account.getAccountTags()
+                .stream()
+                .map(AccountTag::getTag)
+                .map(Tag::getTitle)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void addTag(Account account, Tag tag) {
+        AccountTag accountTag = new AccountTag();
+        accountTag.setAccount(account);
+        accountTag.setTag(tag);
+
+        if (!account.getAccountTags().contains(accountTag)) {
+            accountTagRepository.save(accountTag);
+        }
+    }
+
+    @Transactional
+    public void removeTag(Account account, Tag tag) {
+        AccountTag accountTag = accountTagRepository.findByAccountAndTag(account, tag);
+        accountTagRepository.delete(accountTag);
     }
 }

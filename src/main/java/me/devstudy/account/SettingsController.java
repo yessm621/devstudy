@@ -4,15 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.devstudy.account.dto.NicknameForm;
-import me.devstudy.account.dto.NotificationForm;
-import me.devstudy.account.dto.PasswordForm;
-import me.devstudy.account.dto.ProfileDto;
+import me.devstudy.account.dto.*;
 import me.devstudy.account.validator.NicknameFormValidator;
 import me.devstudy.account.validator.PasswordFormValidator;
 import me.devstudy.domain.Account;
 import me.devstudy.domain.Tag;
 import me.devstudy.tag.TagRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -20,8 +18,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -122,17 +119,31 @@ public class SettingsController {
     }
 
     @GetMapping("/tags")
-    public String updateTags(@CurrentUser Account account, Model model) {
+    public String getTags(@CurrentUser Account account, Model model) {
+        List<String> tags = accountService.getTags(account);
+        System.out.println("tags = " + tags);
+        model.addAttribute("tags", tags);
         model.addAttribute(account);
-        /*Set<Tag> tags = accountService.getTags(account);
-        model.addAttribute("tags", tags.stream()
-                .map(Tag::getTitle)
-                .collect(Collectors.toList()));*/
         return "settings/tags";
     }
 
-    @PostMapping("/tags")
-    public String updateTag() {
-        return "settings/tags";
+    @PostMapping("/tags/add")
+    @ResponseStatus(HttpStatus.OK)
+    public void addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title)
+                .orElseGet(() -> tagRepository.save(Tag.builder()
+                        .title(title)
+                        .build()));
+        accountService.addTag(account, tag);
+    }
+
+    @PostMapping("/tags/remove")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title)
+                .orElseThrow(IllegalArgumentException::new);
+        accountService.removeTag(account, tag);
     }
 }
