@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TagService {
 
     private final AccountRepository accountRepository;
@@ -47,5 +48,12 @@ public class TagService {
                 .orElseThrow(IllegalArgumentException::new);
         AccountTag accountTag = accountTagRepository.findByAccountAndTag(account, tag);
         accountTagRepository.delete(accountTag);
+    }
+
+    public List<String> whitelist() {
+        return tagRepository.findAll()
+                .stream()
+                .map(Tag::getTitle)
+                .collect(Collectors.toList());
     }
 }

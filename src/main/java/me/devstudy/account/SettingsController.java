@@ -1,5 +1,7 @@
 package me.devstudy.account;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -28,6 +30,7 @@ public class SettingsController {
     private final TagService tagService;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameFormValidator nicknameFormValidator;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("passwordForm")
     public void passwordFormInitBinder(WebDataBinder webDataBinder) {
@@ -38,7 +41,6 @@ public class SettingsController {
     public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(nicknameFormValidator);
     }
-
 
     @GetMapping("/profile")
     public String profileUpdateForm(@CurrentUser Account account, Model model) {
@@ -118,9 +120,10 @@ public class SettingsController {
     }
 
     @GetMapping("/tags")
-    public String getTags(@CurrentUser Account account, Model model) {
+    public String getTags(@CurrentUser Account account, Model model) throws JsonProcessingException {
         List<String> tags = tagService.getTags(account);
         model.addAttribute("tags", tags);
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(tagService.whitelist()));
         model.addAttribute(account);
         return "settings/tags";
     }

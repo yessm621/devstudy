@@ -44,6 +44,7 @@
           </div>
           <input type="text" id="tags" name="tags" class="tagify tagify--outside"
                  th:value="${#strings.listJoin(tags, ',')}" aria-describedby="tagHelp">
+          <div id="whitelist" th:text="${whitelist}" hidden></div>
         </div>
       </div>
     </div>
@@ -89,6 +90,7 @@
     let tagInput = document.querySelector("#tags");
     let tagify = new Tagify(tagInput, {
       pattern: /^.{0,20}$/,
+      whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
       dropdown: {
         enabled: 1
       }
@@ -97,16 +99,12 @@
     tagify.on("add", onAdd);
     tagify.on("remove", onRemove);
 
-    /*tagify.DOM.input.classList.add('form-control');
-    tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);*/
-    // 안전하게 input 요소 찾기
     let tagifyInput = tagInput.closest(".tagify"); // Tagify가 wrapping하는 최상위 요소 찾기
     if (tagifyInput) {
       let originalInput = tagifyInput.querySelector("input"); // 내부 input 찾기
       if (originalInput) {
         originalInput.classList.add("form-control");
 
-        // 부모 요소에서 tagifyInput 앞에 삽입
         tagifyInput.parentNode.insertBefore(originalInput, tagifyInput);
       }
     }
