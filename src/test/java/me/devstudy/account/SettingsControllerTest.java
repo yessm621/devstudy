@@ -1,17 +1,22 @@
 package me.devstudy.account;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import me.devstudy.account.dto.TagForm;
 import me.devstudy.domain.Account;
+import me.devstudy.tag.TagRepository;
+import me.devstudy.tag.TagService;
 import me.devstudy.utils.WithAccount;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -21,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class SettingsControllerTest {
 
     @Autowired
@@ -32,16 +38,20 @@ class SettingsControllerTest {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    TagService tagService;
+
+    @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
     @MockitoBean
     JavaMailSender javaMailSender;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @AfterEach
-    void afterEach() {
-        accountRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("프로필 수정: 입력값 정상")
@@ -72,7 +82,7 @@ class SettingsControllerTest {
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("profileDto"));
         Account account = accountRepository.findByNickname("nickname");
-        assertNull(account.getProfile().getBio());
+        assertNull(account.getProfile());
     }
 
     @Test
@@ -109,10 +119,7 @@ class SettingsControllerTest {
                 .andExpect(redirectedUrl("/settings/password"))
                 .andExpect(flash().attributeExists("message"));
 
-        accountRepository.flush();
-
         Account account = accountRepository.findByNickname("nickname");
-
         assertTrue(bCryptPasswordEncoder.matches("12341234", account.getPassword()));
     }
 
@@ -236,5 +243,50 @@ class SettingsControllerTest {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("nicknameForm"))
                 .andExpect(model().attributeExists("account"));
+    }
+
+    @Test
+    @DisplayName("태그 수정 폼")
+    @WithAccount("nickname")
+    void getTags() throws Exception {
+        mockMvc.perform(get("/settings/tags"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("settings/tags"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("tags"));
+    }
+
+    @Test
+    @DisplayName("태그 추가")
+    @WithAccount("nickname")
+    void addTag() throws Exception {
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("tagTitle");
+        mockMvc.perform(post("/settings/tags/add")
+                        .param("tagTitle", tagForm.getTagTitle())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(tagForm))
+                        .with(csrf()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("태그 삭제")
+    @WithAccount("nickname")
+    void removeTag() throws Exception {
+        String tagTitle = "tagTitle";
+        Account account = accountRepository.findByNickname("nickname");
+        tagService.addTag(account.getEmail(), tagTitle);
+
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("tagTitle");
+
+        mockMvc.perform(post("/settings/tags/remove")
+                        .param("tagTitle", tagTitle)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(tagForm))
+                        .with(csrf()))
+                .andExpect(status().isOk());
     }
 }

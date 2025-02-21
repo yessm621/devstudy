@@ -16,7 +16,8 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-@ToString
+@Setter
+@ToString(exclude = "accountTags")
 public class Account extends AuditingEntity {
 
     @Id

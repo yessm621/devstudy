@@ -7,6 +7,7 @@ import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.ProfileDto;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.domain.Account;
+import me.devstudy.domain.Notification;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
