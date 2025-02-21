@@ -8,8 +8,7 @@ import me.devstudy.account.dto.*;
 import me.devstudy.account.validator.NicknameFormValidator;
 import me.devstudy.account.validator.PasswordFormValidator;
 import me.devstudy.domain.Account;
-import me.devstudy.domain.Tag;
-import me.devstudy.tag.TagRepository;
+import me.devstudy.tag.TagService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +25,7 @@ import java.util.List;
 public class SettingsController {
 
     private final AccountService accountService;
-    private final TagRepository tagRepository;
+    private final TagService tagService;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameFormValidator nicknameFormValidator;
 
@@ -120,8 +119,7 @@ public class SettingsController {
 
     @GetMapping("/tags")
     public String getTags(@CurrentUser Account account, Model model) {
-        List<String> tags = accountService.getTags(account);
-        System.out.println("tags = " + tags);
+        List<String> tags = tagService.getTags(account);
         model.addAttribute("tags", tags);
         model.addAttribute(account);
         return "settings/tags";
@@ -131,19 +129,13 @@ public class SettingsController {
     @ResponseStatus(HttpStatus.OK)
     public void addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
-        Tag tag = tagRepository.findByTitle(title)
-                .orElseGet(() -> tagRepository.save(Tag.builder()
-                        .title(title)
-                        .build()));
-        accountService.addTag(account, tag);
+        tagService.addTag(account.getEmail(), title);
     }
 
     @PostMapping("/tags/remove")
     @ResponseStatus(HttpStatus.OK)
     public void removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
-        Tag tag = tagRepository.findByTitle(title)
-                .orElseThrow(IllegalArgumentException::new);
-        accountService.removeTag(account, tag);
+        tagService.removeTag(account, title);
     }
 }

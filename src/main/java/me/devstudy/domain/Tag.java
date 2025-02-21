@@ -5,8 +5,8 @@ import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Builder
 @Getter
 @ToString

@@ -4,12 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @EqualsAndHashCode(of = {"account", "tag"})
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class AccountTag {
 
     @Id
@@ -24,4 +23,11 @@ public class AccountTag {
     @ManyToOne
     @JoinColumn(name = "tag_id")
     private Tag tag;
+
+    public static AccountTag createAccountTag(Account account, Tag tag) {
+        AccountTag accountTag = new AccountTag();
+        accountTag.account = account;
+        accountTag.tag = tag;
+        return accountTag;
+    }
 }
