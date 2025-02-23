@@ -6,10 +6,7 @@ import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.ProfileDto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -45,6 +42,9 @@ public class Account extends AuditingEntity {
 
     @OneToMany(mappedBy = "account")
     private List<AccountTag> accountTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "account")
+    private Set<AccountZone> accountZones = new HashSet<>();
 
     public static Account with(String email, String nickname, String password) {
         Account account = new Account();

@@ -11,6 +11,7 @@ import me.devstudy.account.validator.NicknameFormValidator;
 import me.devstudy.account.validator.PasswordFormValidator;
 import me.devstudy.domain.Account;
 import me.devstudy.tag.TagService;
+import me.devstudy.zone.ZoneService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ public class SettingsController {
 
     private final AccountService accountService;
     private final TagService tagService;
+    private final ZoneService zoneService;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameFormValidator nicknameFormValidator;
     private final ObjectMapper objectMapper;
@@ -140,5 +142,27 @@ public class SettingsController {
     public void removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
         tagService.removeTag(account, title);
+    }
+
+    @GetMapping("/zones")
+    public String updateZonesForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
+        model.addAttribute(account);
+        List<String> zones = zoneService.getZones(account);
+        List<String> allZones = zoneService.getAllZones();
+        model.addAttribute("zones", zones);
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
+        return "settings/zones";
+    }
+
+    @PostMapping("/zones/add")
+    @ResponseStatus(HttpStatus.OK)
+    public void addZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
+        zoneService.addZone(account, zoneForm);
+    }
+
+    @PostMapping("/zones/remove")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
+        zoneService.removeZone(account, zoneForm);
     }
 }

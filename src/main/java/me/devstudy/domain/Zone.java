@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class Zone {
 
     @Id
@@ -32,5 +30,10 @@ public class Zone {
         zone.localNameOfCity = split[1];
         zone.province = split[2];
         return zone;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s(%s)/%s", city, localNameOfCity, province);
     }
 }

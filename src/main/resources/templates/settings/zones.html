@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/base/fragments :: head}"></head>
+<body class="bg-light">
+<div th:replace="~{/base/fragments :: nav}"></div>
+<svg th:replace="~{/base/fragments :: svg-symbols}"/>
+<style>
+    .tagify--outside {
+        border: 0;
+    }
+
+    .tagify--outside .tagify__input {
+        order: -1;
+        flex: 100%;
+        border: 1px solid var(--tags-border-color);
+        margin-bottom: 0.2em;
+        transition: .1s;
+    }
+
+    .tagify--outside .tagify__input:hover {
+        border-color: var(--tags-hover-border-color);
+    }
+
+    .tagify--outside.tagify--focus .tagify__input {
+        transition: 0s;
+        border-color: var(--tags-focus-border-color);
+    }
+</style>
+<div class="container">
+  <div class="row mt-5 justify-content-center">
+    <div class="col-2">
+      <div th:replace="~{/base/fragments :: settings-menu (currentMenu='zones')}"></div>
+    </div>
+    <div class="col-8">
+      <div class="row">
+        <h2 class="col-12">주요 활동 지역</h2>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-info" role="alert">
+            <svg th:replace="~{/base/fragments :: symbol-info}"/>
+            스터디를 참가할 수 있는 지역을 등록하세요. 해당 지역에 스터디가 등록되면 알림을 받을 수 있습니다. 시스템에 등록된 지역 외에는 등록되지 않습니다. 반드시 자동완성을 통해 입력해주세요.
+          </div>
+          <input id="zones" type="text" name="zones" th:value="${#strings.listJoin(zones, ',')}"
+                 class="tagify tagify--outside" aria-describedby="tagHelp"/>
+          <div id="whitelist" th:text="${whitelist}" hidden></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:replace="~{/base/fragments :: footer}"></div>
+</div>
+<script type="application/javascript" th:inline="javascript">
+  $(function () {
+    let csrfToken = /*[[${_csrf.token}]]*/ null;
+    let csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+    $(document).ajaxSend(function (e, xhr, options) {
+      xhr.setRequestHeader(csrfHeader, csrfToken);
+    });
+  });
+</script>
+<script src="/node_modules/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<script type="application/javascript">
+  $(function () {
+    function tagRequest(url, zoneName) {
+      $.ajax({
+        dataType: "json",
+        autocomplete: {
+          enabled: true,
+          rightKey: true
+        },
+        contentType: "application/json; charset=utf-8",
+        method: "POST",
+        url: "/settings/zones" + url,
+        data: JSON.stringify({'zoneName': zoneName})
+      }).done(function (data, status) {
+        console.log("${data} and status is #{status}")
+      })
+    }
+
+    function onAdd(e) {
+      tagRequest("/add", e.detail.data.value);
+    }
+
+    function onRemove(e) {
+      tagRequest("/remove", e.detail.data.value);
+    }
+
+    let zoneInput = document.querySelector("#zones");
+    let tagify = new Tagify(zoneInput, {
+      pattern: /^.{0,20}$/,
+      whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+      dropdown: {
+        enabled: 1
+      }
+    });
+
+    tagify.on("add", onAdd);
+    tagify.on("remove", onRemove);
+
+    let tagifyInput = zoneInput.closest(".tagify"); // Tagify가 wrapping하는 최상위 요소 찾기
+    if (tagifyInput) {
+      let originalInput = tagifyInput.querySelector("input"); // 내부 input 찾기
+      if (originalInput) {
+        originalInput.classList.add("form-control");
+
+        tagifyInput.parentNode.insertBefore(originalInput, tagifyInput);
+      }
+    }
+  });
+</script>
+</body>
+</html>
