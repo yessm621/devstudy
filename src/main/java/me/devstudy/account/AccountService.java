@@ -7,9 +7,8 @@ import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.ProfileDto;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.domain.Account;
-import me.devstudy.domain.Notification;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import me.devstudy.mail.EmailMessage;
+import me.devstudy.mail.EmailService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +30,7 @@ import java.util.Optional;
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+    private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
@@ -49,12 +48,12 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendVerificationEmail(Account newAccount) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("[DevStudy] 회원가입 인증");
-        mailMessage.setText(String.format("/check-email-token?token=%s&email=%s",
-                newAccount.getEmailToken(), newAccount.getEmail()));
-        javaMailSender.send(mailMessage);
+        emailService.sendEmail(EmailMessage.builder()
+                .to(newAccount.getEmail())
+                .subject("[DevStudy] 회원가입 인증")
+                .message(String.format("/check-email-token?token=%s&email=%s",
+                        newAccount.getEmailToken(), newAccount.getEmail()))
+                .build());
     }
 
     public Account findAccountByEmail(String email) {
@@ -111,11 +110,11 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendLoginLink(Account account) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(account.getEmail());
-        mailMessage.setSubject("[DevStudy] 로그인 링크");
-        mailMessage.setText(String.format("/login-by-email?token=%s&email=%s",
-                account.getEmailToken(), account.getEmail()));
-        javaMailSender.send(mailMessage);
+        emailService.sendEmail(EmailMessage.builder()
+                .to(account.getEmail())
+                .subject("[DevStudy] 로그인 링크")
+                .message(String.format("/login-by-email?token=%s&email=%s",
+                        account.getEmailToken(), account.getEmail()))
+                .build());
     }
 }

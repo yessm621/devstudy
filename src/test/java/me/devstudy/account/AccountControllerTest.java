@@ -3,13 +3,13 @@ package me.devstudy.account;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.domain.Account;
 import me.devstudy.domain.Notification;
+import me.devstudy.mail.EmailMessage;
+import me.devstudy.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +41,7 @@ class AccountControllerTest {
     AccountRepository accountRepository;
 
     @MockitoBean
-    JavaMailSender javaMailSender;
+    EmailService emailService;
 
     @Test
     @DisplayName("회원 가입 화면 진입 확인")
@@ -85,9 +85,9 @@ class AccountControllerTest {
         Account account = accountRepository.findByEmail("nohsm621@gmail.com");
         assertNotEquals(account.getPassword(), "1234!@#$qwer");
 
-        then(javaMailSender)
+        then(emailService)
                 .should()
-                .send(any(SimpleMailMessage.class));
+                .sendEmail(any(EmailMessage.class));
     }
 
     @Test
