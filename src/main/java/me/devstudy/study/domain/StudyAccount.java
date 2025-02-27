@@ -1,4 +1,4 @@
-package me.devstudy.study;
+package me.devstudy.study.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,4 +25,12 @@ public class StudyAccount {
     private Study study;
 
     private boolean isManager;
+
+    public static StudyAccount createStudyManager(Account account, Study study) {
+        StudyAccount studyAccount = new StudyAccount();
+        studyAccount.account = account;
+        studyAccount.study = study;
+        studyAccount.isManager = true;
+        return studyAccount;
+    }
 }

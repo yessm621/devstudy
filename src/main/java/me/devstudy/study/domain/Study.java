@@ -1,7 +1,8 @@
-package me.devstudy.study;
+package me.devstudy.study.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.devstudy.study.dto.StudyForm;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -19,10 +20,10 @@ public class Study {
     @Column(name = "study_id")
     private Long id;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "study")
     private Set<StudyAccount> managers = new HashSet<>();
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "study")
     private Set<StudyAccount> members = new HashSet<>();
 
     private String path;
@@ -39,10 +40,10 @@ public class Study {
     @Basic(fetch = FetchType.EAGER)
     private String image;
 
-    @OneToMany(mappedBy = "tag")
+    @OneToMany(mappedBy = "study")
     private Set<StudyTag> studyTags = new HashSet<>();
 
-    @OneToMany(mappedBy = "zone")
+    @OneToMany(mappedBy = "study")
     private Set<StudyZone> studyZones = new HashSet<>();
 
     private LocalDateTime publishedDateTime;
@@ -58,4 +59,17 @@ public class Study {
     private boolean closed;
 
     private boolean useBanner;
+
+    public static Study createStudy(StudyForm studyForm) {
+        Study study = new Study();
+        study.title = studyForm.getTitle();
+        study.shortDescription = studyForm.getShortDescription();
+        study.fullDescription = studyForm.getFullDescription();
+        study.path = studyForm.getPath();
+        return study;
+    }
+
+    public void addManager(StudyAccount studyAccount) {
+        managers.add(studyAccount);
+    }
 }

@@ -1,17 +1,17 @@
-package me.devstudy.study;
+package me.devstudy.study.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.devstudy.domain.Zone;
+import me.devstudy.domain.Tag;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class StudyZone {
+public class StudyTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +23,13 @@ public class StudyZone {
     private Study study;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "zone_id", nullable = false)
-    private Zone zone;
+    @JoinColumn(name = "tag_id", nullable = false)
+    private Tag tag;
 
-    public static StudyZone createStudyZone(Study study, Zone zone) {
-        StudyZone studyZone = new StudyZone();
-        studyZone.study = study;
-        studyZone.zone = zone;
-        return studyZone;
+    public static StudyTag createStudyTag(Study study, Tag tag) {
+        StudyTag studyTag = new StudyTag();
+        studyTag.study = study;
+        studyTag.tag = tag;
+        return studyTag;
     }
 }
