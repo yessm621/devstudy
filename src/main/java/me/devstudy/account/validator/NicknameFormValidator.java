@@ -3,7 +3,7 @@ package me.devstudy.account.validator;
 import lombok.RequiredArgsConstructor;
 import me.devstudy.account.AccountRepository;
 import me.devstudy.account.dto.NicknameForm;
-import me.devstudy.domain.Account;
+import me.devstudy.account.domain.Account;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

@@ -1,8 +1,8 @@
 package me.devstudy.zone;
 
-import me.devstudy.domain.Account;
-import me.devstudy.domain.AccountZone;
-import me.devstudy.domain.Zone;
+import me.devstudy.account.domain.Account;
+import me.devstudy.zone.domain.AccountZone;
+import me.devstudy.zone.domain.Zone;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Set;

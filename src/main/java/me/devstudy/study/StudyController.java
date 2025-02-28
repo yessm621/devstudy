@@ -3,7 +3,7 @@ package me.devstudy.study;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.devstudy.account.CurrentUser;
-import me.devstudy.domain.Account;
+import me.devstudy.account.domain.Account;
 import me.devstudy.study.domain.Study;
 import me.devstudy.study.dto.StudyForm;
 import me.devstudy.study.validator.StudyFormValidator;

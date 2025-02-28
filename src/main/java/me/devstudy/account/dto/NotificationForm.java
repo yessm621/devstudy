@@ -3,7 +3,7 @@ package me.devstudy.account.dto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.devstudy.domain.Account;
+import me.devstudy.account.domain.Account;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

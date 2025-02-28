@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.account.validator.SignupFormValidator;
-import me.devstudy.domain.Account;
+import me.devstudy.account.domain.Account;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;

@@ -1,4 +1,4 @@
-package me.devstudy.domain;
+package me.devstudy.account.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.*;

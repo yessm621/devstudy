@@ -2,9 +2,9 @@ package me.devstudy.tag;
 
 import lombok.RequiredArgsConstructor;
 import me.devstudy.account.AccountRepository;
-import me.devstudy.domain.Account;
-import me.devstudy.domain.AccountTag;
-import me.devstudy.domain.Tag;
+import me.devstudy.account.domain.Account;
+import me.devstudy.tag.domain.AccountTag;
+import me.devstudy.tag.domain.Tag;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

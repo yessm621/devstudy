@@ -1,6 +1,6 @@
 package me.devstudy.account.domain;
 
-import me.devstudy.domain.support.ListStringConverter;
+import me.devstudy.account.domain.support.ListStringConverter;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

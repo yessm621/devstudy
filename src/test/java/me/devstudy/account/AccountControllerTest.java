@@ -1,8 +1,8 @@
 package me.devstudy.account;
 
 import me.devstudy.account.dto.SignupForm;
-import me.devstudy.domain.Account;
-import me.devstudy.domain.Notification;
+import me.devstudy.account.domain.Account;
+import me.devstudy.account.domain.Notification;
 import me.devstudy.mail.EmailMessage;
 import me.devstudy.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;

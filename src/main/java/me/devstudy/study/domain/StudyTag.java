@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.devstudy.domain.Tag;
+import me.devstudy.tag.domain.Tag;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,7 +1,8 @@
-package me.devstudy.domain;
+package me.devstudy.tag.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.devstudy.account.domain.Account;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

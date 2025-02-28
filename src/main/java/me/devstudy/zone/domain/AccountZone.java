@@ -1,9 +1,10 @@
-package me.devstudy.domain;
+package me.devstudy.zone.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.devstudy.account.domain.Account;
 
 @Entity
 @Getter

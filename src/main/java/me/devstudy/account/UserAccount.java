@@ -1,7 +1,7 @@
 package me.devstudy.account;
 
 import lombok.Getter;
-import me.devstudy.domain.Account;
+import me.devstudy.account.domain.Account;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 

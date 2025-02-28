@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import me.devstudy.account.dto.*;
 import me.devstudy.account.validator.NicknameFormValidator;
 import me.devstudy.account.validator.PasswordFormValidator;
-import me.devstudy.domain.Account;
+import me.devstudy.account.domain.Account;
 import me.devstudy.tag.TagService;
 import me.devstudy.zone.ZoneService;
 import org.springframework.http.HttpStatus;

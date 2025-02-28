@@ -1,9 +1,11 @@
-package me.devstudy.domain;
+package me.devstudy.account.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
 import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.ProfileDto;
+import me.devstudy.tag.domain.AccountTag;
+import me.devstudy.zone.domain.AccountZone;
 
 import java.time.LocalDateTime;
 import java.util.*;

@@ -3,8 +3,8 @@ package me.devstudy.account.dto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.devstudy.domain.Account;
-import me.devstudy.domain.Profile;
+import me.devstudy.account.domain.Account;
+import me.devstudy.account.domain.Profile;
 import org.hibernate.validator.constraints.Length;
 
 @Data

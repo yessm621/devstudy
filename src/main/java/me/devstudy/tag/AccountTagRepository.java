@@ -1,8 +1,8 @@
 package me.devstudy.tag;
 
-import me.devstudy.domain.Account;
-import me.devstudy.domain.AccountTag;
-import me.devstudy.domain.Tag;
+import me.devstudy.account.domain.Account;
+import me.devstudy.tag.domain.AccountTag;
+import me.devstudy.tag.domain.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

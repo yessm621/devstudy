@@ -7,7 +7,7 @@ import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.ProfileDto;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.config.AppProperties;
-import me.devstudy.domain.Account;
+import me.devstudy.account.domain.Account;
 import me.devstudy.mail.EmailMessage;
 import me.devstudy.mail.EmailService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

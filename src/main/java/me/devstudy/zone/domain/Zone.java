@@ -1,4 +1,4 @@
-package me.devstudy.domain;
+package me.devstudy.zone.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
