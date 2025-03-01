@@ -48,7 +48,8 @@ public class Account extends AuditingEntity {
     @OneToMany(mappedBy = "account")
     private Set<AccountZone> accountZones = new HashSet<>();
 
-    public static Account with(String email, String nickname, String password) {
+    //== 정적 팩토리 메서드 ==//
+    public static Account createAccount(String email, String nickname, String password) {
         Account account = new Account();
         account.email = email;
         account.nickname = nickname;

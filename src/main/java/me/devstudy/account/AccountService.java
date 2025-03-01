@@ -3,11 +3,12 @@ package me.devstudy.account;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import me.devstudy.account.domain.Account;
 import me.devstudy.account.dto.NotificationForm;
 import me.devstudy.account.dto.ProfileDto;
 import me.devstudy.account.dto.SignupForm;
 import me.devstudy.config.AppProperties;
-import me.devstudy.account.domain.Account;
+import me.devstudy.login.dto.CustomUserDetails;
 import me.devstudy.mail.EmailMessage;
 import me.devstudy.mail.EmailService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,7 +47,7 @@ public class AccountService implements UserDetailsService {
     }
 
     private Account saveNewAccount(SignupForm signupForm) {
-        Account account = Account.with(signupForm.getEmail(), signupForm.getNickname(),
+        Account account = Account.createAccount(signupForm.getEmail(), signupForm.getNickname(),
                 bCryptPasswordEncoder.encode(signupForm.getPassword()));
         account.generateToken();
         return accountRepository.save(account);
@@ -88,7 +89,7 @@ public class AccountService implements UserDetailsService {
         if (account == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new UserAccount(account);
+        return new CustomUserDetails(account);
     }
 
     @Transactional
