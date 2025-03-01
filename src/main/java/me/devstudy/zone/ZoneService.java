@@ -2,8 +2,8 @@ package me.devstudy.zone;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import me.devstudy.account.dto.ZoneForm;
 import me.devstudy.account.domain.Account;
+import me.devstudy.account.dto.ZoneForm;
 import me.devstudy.zone.domain.AccountZone;
 import me.devstudy.zone.domain.Zone;
 import org.springframework.core.io.ClassPathResource;
@@ -65,7 +65,8 @@ public class ZoneService {
     public void removeZone(Account account, ZoneForm zoneForm) {
         Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName())
                 .orElseThrow(IllegalArgumentException::new);
-        AccountZone accountZone = accountZoneRepository.findByAccountAndZone(account, zone);
+        AccountZone accountZone = accountZoneRepository.findByAccountAndZone(account, zone)
+                .orElseThrow(IllegalArgumentException::new);
         accountZoneRepository.delete(accountZone);
     }
 }

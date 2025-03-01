@@ -46,7 +46,8 @@ public class TagService {
     public void removeTag(Account account, String title) {
         Tag tag = tagRepository.findByTitle(title)
                 .orElseThrow(IllegalArgumentException::new);
-        AccountTag accountTag = accountTagRepository.findByAccountAndTag(account, tag);
+        AccountTag accountTag = accountTagRepository.findByAccountAndTag(account, tag)
+                .orElseThrow(IllegalArgumentException::new);
         accountTagRepository.delete(accountTag);
     }
 

@@ -5,11 +5,12 @@ import me.devstudy.zone.domain.AccountZone;
 import me.devstudy.zone.domain.Zone;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.Set;
 
 public interface AccountZoneRepository extends JpaRepository<AccountZone, Long> {
 
     Set<AccountZone> findByAccount(Account account);
 
-    AccountZone findByAccountAndZone(Account account, Zone zone);
+    Optional<AccountZone> findByAccountAndZone(Account account, Zone zone);
 }
